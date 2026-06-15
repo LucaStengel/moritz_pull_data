@@ -48,8 +48,8 @@ def main() -> None:
     rates = fetch_exchange_rates()
     usd_myr = round(rates["MYR"] / rates["USD"], 4)
     usd_thb = round(rates["THB"] / rates["USD"], 4)
-    print(f"  ✓ Wechselkurse: 1 EUR = {rates['USD']} USD  |  1 EUR = {rates['CNY']} CNY")
-    print(f"                  1 USD = {usd_myr} MYR   |  1 USD = {usd_thb} THB")
+    print(f"  ✓ Wechselkurse: 1 EUR = {rates['USD']:.4f} USD  |  1 EUR = {rates['CNY']:.4f} CNY")
+    print(f"                  1 USD = {usd_myr:.4f} MYR   |  1 USD = {usd_thb:.4f} THB")
 
     latex = cotton = nitrile = float("nan")
     oil_wti = oil_brent = gas_ttf = polyethylene = float("nan")

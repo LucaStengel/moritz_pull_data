@@ -154,6 +154,6 @@ def append_prices(
     print(f"  {'Erdgas TTF':<16} {fmt(gas_ttf, 'EUR/MWh'):<22}")
     print(f"  {'Polyethylen':<16} {fmt(polyethylene, 'CNY/t'):<22} {fmt(pe_eur, 'EUR/t')}")
     print()
-    print(f"  Wechselkurse: 1 EUR = {rates['USD']} USD  |  1 EUR = {rates['CNY']} CNY")
-    print(f"                1 USD = {usd_myr} MYR   |  1 USD = {usd_thb} THB")
+    print(f"  Wechselkurse: 1 EUR = {rates['USD']:.4f} USD  |  1 EUR = {rates['CNY']:.4f} CNY")
+    print(f"                1 USD = {usd_myr:.4f} MYR   |  1 USD = {usd_thb:.4f} THB")
     print(f"  Datei: {EXCEL_FILE}")

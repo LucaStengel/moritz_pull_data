@@ -1,6 +1,6 @@
 # Rohstoffpreis-Tracker
 
-Dieses Skript ruft täglich die aktuellen Marktpreise für **Latex**, **Baumwolle** und **Nitril/Butadien** von offiziellen Quellen ab, rechnet sie automatisch in **EUR/Tonne** um und speichert alles übersichtlich in einer Excel-Datei. Optional können Preisverlaufsgraphen angezeigt werden.
+Dieses Skript ruft täglich die aktuellen Marktpreise für **Latex**, **Baumwolle**, **Nitril/Butadien**, **Öl (WTI & Brent)**, **Erdgas (TTF)** und **Polyethylen** von offiziellen Quellen ab, rechnet sie automatisch in **EUR** um und speichert alles übersichtlich in einer Excel-Datei. Optional können Preisverlaufsgraphen angezeigt werden.
 
 ---
 
@@ -8,19 +8,27 @@ Dieses Skript ruft täglich die aktuellen Marktpreise für **Latex**, **Baumwoll
 
 Bei jedem Aufruf passiert Folgendes:
 
-1. **Wechselkurse abrufen** – aktuelle EUR/USD- und EUR/CNY-Kurse werden live von einer kostenlosen API geladen
+1. **Wechselkurse abrufen** – aktuelle EUR/USD-, EUR/CNY-, EUR/MYR- und EUR/THB-Kurse werden live von einer kostenlosen API geladen
 2. **Latex-Preis** – wird direkt von der offiziellen API des Malaysian Rubber Board (LGM) abgerufen
 3. **Baumwoll-Future** – wird von Onvista.de (ICE Futures) abgerufen
 4. **Nitril/Butadien-Preis** – Benchmark-Preis wird von der chinesischen Rohstoffplattform 100ppi.com abgerufen
-5. **Alles wird in `prices.xlsx` gespeichert** – neue Zeile wird angehängt, bestehende Daten bleiben erhalten
+5. **Öl WTI & Brent** – werden von Onvista.de (finanzen.net-Gruppe) abgerufen
+6. **Erdgas TTF** – Dutch TTF Natural Gas Future von TradingEconomics.com
+7. **Polyethylen** – asiatischer Marktbenchmark (CNY/t) von TradingEconomics.com
+8. **Alles wird in `prices.xlsx` gespeichert** – neue Zeile wird angehängt, bestehende Daten bleiben erhalten
 
 **Ausgabe in der Konsole (Beispiel):**
 ```
 Rufe aktuelle Preise und Wechselkurse ab …
-  ✓ Wechselkurse: 1 EUR = 1.16 USD | 1 EUR = 7.90 CNY
-  ✓ Latex:     758.0 USD/t  →  653.45 EUR/t
-  ✓ Baumwolle: 77.37 USc/lb  →  1470.44 EUR/t
-  ✓ Nitril:    12100.0 CNY/t  →  1531.65 EUR/t
+  ✓ Wechselkurse: 1 EUR = 1.16 USD  |  1 EUR = 7.85 CNY
+                  1 USD = 4.0517 MYR   |  1 USD = 32.64 THB
+  ✓ Latex          786.0 USD/t  →  677.59 EUR/t
+  ✓ Baumwolle      72.94 USc/lb  →  1386.25 EUR/t
+  ✓ Nitril         10500.0 CNY/t  →  1337.58 EUR/t
+  ✓ Öl WTI         80.56 USD/bbl  →  69.44 EUR/bbl
+  ✓ Öl Brent       83.19 USD/bbl  →  71.72 EUR/bbl
+  ✓ Erdgas TTF     42.52 EUR/MWh
+  ✓ Polyethylen    7729.0 CNY/t  →  984.59 EUR/t
 ```
 
 ---
@@ -29,20 +37,31 @@ Rufe aktuelle Preise und Wechselkurse ab …
 
 | Spalte | Inhalt | Erklärung |
 |--------|--------|-----------|
-| A – Datum | `2026-05-27 14:32:00` | Zeitpunkt des Abrufs |
-| B – Latex (USD/t) | `758.0` | Originalpreis in US-Dollar pro Tonne |
-| C – Latex (EUR/t) | `653.45` | Umgerechnet in Euro pro Tonne |
-| D – Baumwolle (USc/lb) | `77.37` | Originalpreis in US-Cent pro Pfund (Börsenkurs) |
-| E – Baumwolle (EUR/t) | `1470.44` | Umgerechnet in Euro pro Tonne |
-| F – Nitril (CNY/t) | `12100.0` | Originalpreis in Chinesischen Yuan pro Tonne |
-| G – Nitril (EUR/t) | `1531.65` | Umgerechnet in Euro pro Tonne |
-| H – EUR/USD Kurs | `1.16` | Kurs des Tages: 1 EUR entsprach X USD |
-| I – EUR/CNY Kurs | `7.90` | Kurs des Tages: 1 EUR entsprach X CNY |
+| A – Datum | `2026-06-15 09:00:00` | Zeitpunkt des Abrufs |
+| B – Latex (USD/t) | `786.0` | Originalpreis in US-Dollar pro Tonne |
+| C – Latex (EUR/t) | `677.59` | Umgerechnet in Euro pro Tonne |
+| D – Baumwolle (USc/lb) | `72.94` | Originalpreis in US-Cent pro Pfund |
+| E – Baumwolle (EUR/t) | `1386.25` | Umgerechnet in Euro pro Tonne |
+| F – Nitril (CNY/t) | `10500.0` | Originalpreis in Chinesischen Yuan pro Tonne |
+| G – Nitril (EUR/t) | `1337.58` | Umgerechnet in Euro pro Tonne |
+| H – EUR/USD Kurs | `1.16` | Kurs des Tages: 1 EUR = X USD |
+| I – EUR/CNY Kurs | `7.85` | Kurs des Tages: 1 EUR = X CNY |
+| J – Öl WTI (USD/bbl) | `80.56` | WTI-Rohöl in US-Dollar pro Barrel |
+| K – Öl WTI (EUR/bbl) | `69.44` | Umgerechnet in Euro pro Barrel |
+| L – Öl Brent (USD/bbl) | `83.19` | Brent-Rohöl in US-Dollar pro Barrel |
+| M – Öl Brent (EUR/bbl) | `71.72` | Umgerechnet in Euro pro Barrel |
+| N – Erdgas TTF (EUR/MWh) | `42.52` | Dutch TTF Natural Gas Future in Euro pro MWh |
+| O – Polyethylen (CNY/t) | `7729.0` | PE-Benchmark Asien in Chinesischen Yuan pro Tonne |
+| P – Polyethylen (EUR/t) | `984.59` | Umgerechnet in Euro pro Tonne |
+| Q – USD/MYR Kurs | `4.0517` | Kreuzrate: 1 US-Dollar = X Malaysische Ringgit |
+| R – USD/THB Kurs | `32.64` | Kreuzrate: 1 US-Dollar = X Thai Baht |
 
 **Umrechnungsformeln:**
 - Latex: `USD/t ÷ EUR/USD-Kurs`
 - Baumwolle: `USc/lb × 22.046 (→ USD/t) ÷ EUR/USD-Kurs`
-- Nitril: `CNY/t ÷ EUR/CNY-Kurs`
+- Nitril & Polyethylen: `CNY/t ÷ EUR/CNY-Kurs`
+- Öl WTI & Brent: `USD/bbl ÷ EUR/USD-Kurs`
+- USD/MYR & USD/THB: `EUR/MYR-Kurs ÷ EUR/USD-Kurs`
 
 ---
 
@@ -76,13 +95,20 @@ Es sollte `uv x.x.x` erscheinen. Dann hat die Installation geklappt.
 
 ### Schritt 2 – Projektdateien herunterladen
 
-Du bekommst die Dateien `main.py` und `pyproject.toml` – lege beide in einem Ordner ab, z. B.:
+Du bekommst einen Projektordner mit folgender Struktur – lege ihn vollständig ab, z. B. unter:
 
 ```
 C:\Users\DeinName\Dokumente\rohstoffpreise\
     main.py
     pyproject.toml
+    src\
+        __init__.py
+        scrapers.py
+        excel.py
+        graphs.py
 ```
+
+> **Wichtig:** Der `src`-Ordner und alle Dateien darin müssen vorhanden sein – das Skript ist auf diese Struktur angewiesen.
 
 ---
 
@@ -137,11 +163,13 @@ uv run main.py -graph -90d
 ```
 Zeigt Graphen für die letzten **90 Tage**.
 
-Es öffnen sich nacheinander drei Fenster. Das nächste öffnet sich jeweils erst, wenn das aktuelle geschlossen wird.
+Es öffnen sich nacheinander fünf Fenster. Das nächste öffnet sich jeweils erst, wenn das aktuelle geschlossen wird.
 
-1. **Rohstoffpreise in EUR/t** – alle drei Rohstoffe in einem Diagramm direkt vergleichbar
-2. **Wechselkurs EUR/USD** – Kursverlauf des Euro gegenüber dem US-Dollar
-3. **Wechselkurs EUR/CNY** – Kursverlauf des Euro gegenüber dem Chinesischen Yuan
+1. **Rohstoffpreise in EUR/t** – Latex, Baumwolle, Nitril und Polyethylen im Vergleich
+2. **Ölpreis in EUR/bbl** – WTI und Brent im Vergleich
+3. **Erdgas TTF in EUR/MWh** – Dutch TTF Natural Gas Future
+4. **Wechselkurse EUR/USD & EUR/CNY** – beide Kurse in einem Diagramm
+5. **Wechselkurse USD/MYR & USD/THB** – Ringgit und Baht im Vergleich
 
 > **Hinweis:** Für aussagekräftige Graphen sind mehrere gespeicherte Datenpunkte nötig – also das Skript idealerweise jeden Werktag einmal ausführen.
 
@@ -226,11 +254,15 @@ Dann dieselbe Zeile wie oben eintragen (Pfade entsprechend anpassen).
 
 ## Quellen
 
-| Rohstoff | Quelle | Originaleinheit |
-|----------|--------|-----------------|
+| Rohstoff / Kurs | Quelle | Originaleinheit |
+|-----------------|--------|-----------------|
 | Latex | [Malaysian Rubber Board (LGM)](https://www.lgm.gov.my) – Grade: Latex in Bulk | USD/t |
 | Baumwolle | [Onvista.de](https://www.onvista.de/rohstoffe/Baumwolle-Future-21474937) – ICE Futures U.S. | USc/lb |
 | Nitril/Butadien | [100ppi.com](https://www.100ppi.com/vane/detail-886.html) – 生意社 Benchmark | CNY/t |
+| Öl WTI | [Onvista.de](https://www.onvista.de/rohstoffe/Oel-WTI-Future-6988820) – finanzen.net-Gruppe | USD/bbl |
+| Öl Brent | [Onvista.de](https://www.onvista.de/rohstoffe/Oel-Brent-Future-6988832) – finanzen.net-Gruppe | USD/bbl |
+| Erdgas TTF | [TradingEconomics.com](https://tradingeconomics.com/commodity/eu-natural-gas) – EU Natural Gas | EUR/MWh |
+| Polyethylen | [TradingEconomics.com](https://tradingeconomics.com/commodity/polyethylene) – asiatischer Benchmark | CNY/t |
 | Wechselkurse | [exchangerate-api.com](https://www.exchangerate-api.com) – kostenlose API | – |
 
 ---
@@ -247,4 +279,4 @@ Dann dieselbe Zeile wie oben eintragen (Pfade entsprechend anpassen).
 → Excel schließen, Skript ausführen, danach Excel wieder öffnen.
 
 **Wechselkurs-Warnung in der Ausgabe**
-→ Falls die Wechselkurs-API nicht erreichbar ist, werden automatisch Näherungswerte verwendet (ca. 1 EUR = 1,08 USD / 7,80 CNY). Die Preise werden trotzdem gespeichert.
+→ Falls die Wechselkurs-API nicht erreichbar ist, werden automatisch Näherungswerte verwendet. Die Preise werden trotzdem gespeichert.
